@@ -1,23 +1,12 @@
 import asyncio
 import logging
+import math
 
 import httpx
 from tqdm import tqdm
 from tqdm.asyncio import tqdm_asyncio
 
 logger = logging.getLogger(__name__)
-
-BASE_URL = "https://www.agnoshealth.com/_next/data/i499vlSTx42EOnWUOHBkP/th/forums/search.json?page={page}"
-HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0"
-    )
-}
-
-TIMEOUT = httpx.Timeout(20.0)
-CONCURRENT_LIMIT = 3
 
 
 def extract_forum_info(forum_obj: dict) -> dict:
@@ -50,8 +39,18 @@ def extract_forum_info(forum_obj: dict) -> dict:
     }
 
 
-async def fetch_page(
-    *, client: httpx.AsyncClient, page: int, sem: asyncio.Semaphore
+async def get_total_pages(client: httpx.AsyncClient, base_url: str) -> int:
+    url = base_url.format(page=1)
+    res = await client.get(url)
+    res.raise_for_status()
+    data = res.json()
+    total_items = data.get("pageProps", {}).get("total", 0)
+    item_per_page = len(data.get("pageProps", {}).get("forums", []))
+    return math.ceil(total_items / item_per_page) if item_per_page else 1
+
+
+async def fecth_forum_page(
+    *, client: httpx.AsyncClient, page: int, sem: asyncio.Semaphore, base_url: str
 ) -> list[dict]:
     """Fetches a page of forum data.
 
@@ -61,7 +60,7 @@ async def fetch_page(
     Returns:
         List of forum objects.
     """
-    url = BASE_URL.format(page=page)
+    url = base_url.format(page=page)
     async with sem:
         try:
             res = await client.get(url)
@@ -74,17 +73,21 @@ async def fetch_page(
             return []
 
 
-async def scrape_all_pages() -> list[dict]:
-    sem = asyncio.Semaphore(CONCURRENT_LIMIT)
-    async with httpx.AsyncClient(timeout=TIMEOUT, headers=HEADERS) as client:
+async def scrape_forum_page(params: dict) -> list[dict]:
+    sem = asyncio.Semaphore(params["concurrent_limit"])
+    timeout = httpx.Timeout(params["timeout"])
+    base_url = params["base_url"]
+    headers = params["headers"]
+
+    async with httpx.AsyncClient(timeout=timeout, headers=headers) as client:
+        page_end = await get_total_pages(client, base_url)
         tasks = [
-            fetch_page(client=client, page=page, sem=sem) for page in range(1, 178)
+            fecth_forum_page(client=client, page=page, sem=sem, base_url=base_url)
+            for page in range(1, page_end + 1)
         ]
         results = await tqdm_asyncio.gather(*tasks)
         return [forum for sublist in results for forum in sublist]
 
 
-def scraping() -> list[dict]:
-    import asyncio
-
-    return asyncio.run(scrape_all_pages())
+def run_scraping_pipeline(params: dict) -> list[dict]:
+    return asyncio.run(scrape_forum_page(params))

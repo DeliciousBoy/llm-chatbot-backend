@@ -1,15 +1,15 @@
 from kedro.pipeline import node, Pipeline, pipeline  # noqa
-from .nodes import scraping
+from .nodes import run_scraping_pipeline
 
 
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline(
         [
             node(
-                func=scraping,
-                inputs=None,
+                func=run_scraping_pipeline,
+                inputs="params:web_scraping",
                 outputs="raw_forum_data",
-                name="scrape_forum_data",
+                name="scraping_node",
             ),
         ]
     )
