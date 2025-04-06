@@ -1,6 +1,11 @@
 import asyncio
+import logging
 
 import httpx
+from tqdm import tqdm
+from tqdm.asyncio import tqdm_asyncio
+
+logger = logging.getLogger(__name__)
 
 BASE_URL = "https://www.agnoshealth.com/_next/data/i499vlSTx42EOnWUOHBkP/th/forums/search.json?page={page}"
 HEADERS = {
@@ -65,7 +70,7 @@ async def fetch_page(
             forums = data.get("pageProps", {}).get("forums", [])
             return [extract_forum_info(f) for f in forums]
         except Exception as e:
-            print(f"Error fetching page {page}: {e}")
+            tqdm.write(f"Error fetching page {page}: {e}")
             return []
 
 
@@ -75,11 +80,11 @@ async def scrape_all_pages() -> list[dict]:
         tasks = [
             fetch_page(client=client, page=page, sem=sem) for page in range(1, 178)
         ]
-        results = await asyncio.gather(*tasks)
+        results = await tqdm_asyncio.gather(*tasks)
         return [forum for sublist in results for forum in sublist]
 
 
-def test() -> list[dict]:
+def scraping() -> list[dict]:
     import asyncio
 
     return asyncio.run(scrape_all_pages())
