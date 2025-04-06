@@ -11,7 +11,9 @@ dependencies = [
     "ipython>=8.10",
     "jupyterlab>=3.0",
     "notebook",
-    "kedro~=0.19.12"
+    "kedro~=0.19.12",
+    "sentence_transformers>=2.2.2",
+    "tqdm>=4.66.1"
 ]
 
 [project.scripts]
