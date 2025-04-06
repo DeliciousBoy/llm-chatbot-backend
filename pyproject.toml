@@ -13,7 +13,8 @@ dependencies = [
     "notebook",
     "kedro~=0.19.12",
     "sentence_transformers>=2.2.2",
-    "tqdm>=4.66.1"
+    "tqdm>=4.66.1",
+    "chromadb>=1.0.0",
 ]
 
 [project.scripts]
@@ -35,8 +36,9 @@ docs = [
     "kedro-viz>=6.7.0"
 ]
 dev = [
-    "pytest-cov~=3.0",
+    "pytest-cov~=4.1",
     "pytest-mock>=1.7.1, <2.0",
+    "pytest-asyncio>=0.23.8",
     "pytest~=7.2",
     "ruff~=0.1.8"
 ]
@@ -85,3 +87,5 @@ ignore = ["E501"]  # Ruff format takes care of line-too-long
 
 [tool.kedro_telemetry]
 project_id = "eb9a87db935142dfb43d40ec71c85dd4"
+
+
