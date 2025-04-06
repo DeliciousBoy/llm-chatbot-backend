@@ -1,10 +1,7 @@
-# Here you can define all your datasets by using simple YAML syntax.
-#
-# Documentation for this file format can be found in "The Data Catalog"
-# Link: https://docs.kedro.org/en/stable/data/data_catalog.html
-forum_raw_data:
+raw_forum_data:
   type: llm_chatbot_backend.datasets.utf8_json.Utf8JSON
   filepath: data/01_raw/forum_data.json
 
-
-
+cleaned_forum_data:
+  type: llm_chatbot_backend.datasets.utf8_json.Utf8JSON
+  filepath: data/02_intermediate/forum_data.json
