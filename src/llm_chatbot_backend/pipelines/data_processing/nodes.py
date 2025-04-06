@@ -1,9 +1,9 @@
-import json
-import logging
 import re
 import unicodedata
-from pathlib import Path
 
+import chromadb
+
+# import logger
 from sentence_transformers import SentenceTransformer
 
 
@@ -27,11 +27,18 @@ def process_text(data: list[dict]) -> list[dict]:
     """Apply cleaning function to target fields in the data."""
     cleaned_data = []
     for item in data:
+        forum = clean_text(item.get("forum_text", ""))
+        doctor_reply = clean_text(item.get("doctor_reply", ""))
+        disease_text = clean_text(item.get("disease_text", ""))
+
+        if not doctor_reply:
+            continue
+
         cleaned_item = {
             **item,  # Copy all original fields
-            "forum_text": clean_text(item.get("forum_text", "")),
-            "doctor_reply": clean_text(item.get("doctor_reply", "")),
-            "disease_text": clean_text(item.get("disease_text", "")),
+            "forum_text": forum,
+            "doctor_reply": doctor_reply,
+            "disease_text": disease_text,
         }
         cleaned_data.append(cleaned_item)
     return cleaned_data
@@ -57,40 +64,42 @@ def embed_forum_data(data_list: list) -> list:
         "sentence-transformers/paraphrase-multilingual-mpnet-base-v2"
     )
 
+    context = [build_rag_context(item) for item in data_list]
+    embedding = model.encode(context, batch_size=32, show_progress_bar=True).tolist()
     embedded_data = []
-    for i, item in enumerate(data_list):
-        context = build_rag_context(item)
-        embedding = model.encode(context).tolist()
+    for i, (item, context, embedding) in enumerate(zip(data_list, context, embedding)):
         embedded_data.append(
             {
                 "id": f"doc_{i}",
                 "embedding": embedding,
                 "context": context,
-                "metadata": {"disease_key": item["disease_key"], "tags": item["tags"]},
+                "metadata": {
+                    "disease_key": item["disease_key"],
+                    "tags": ", ".join(item["tags"]),
+                    "doctor_reply": item["doctor_reply"],
+                },
             }
         )
-
     return embedded_data
 
 
-# def clean_forum_data(input_path: Path, output_path: Path) -> None:
-#     """Load, clean, and save forum data from JSON file."""
-#     try:
-#         with open(input_path, encoding="utf-8") as f:
-#             data = json.load(f)
-#         if not isinstance(data, list):
-#             raise ValueError("Expected a list of forum records")
-#     except Exception as e:
-#         logging.error(f"Error loading input file: {e}")
-#         return
+def save_embedded(data: list[dict], filepath: str) -> str:
+    ...
 
-#     logging.info(f"Loaded {len(data)} records from {input_path.name}")
 
-#     cleaned_data = process_text(data)
+def store_to_chroma(embedded_data: list[dict], persist_path: str) -> str:
+    client = chromadb.PersistentClient(path="data/09_chroma_db")
+    collection = client.get_or_create_collection(name="forum_data")
 
-#     try:
-#         with open(output_path, "w", encoding="utf-8") as f:
-#             json.dump(cleaned_data, f, ensure_ascii=False, indent=2)
-#         logging.info(f"Successfully wrote cleaned data to {output_path.name}")
-#     except Exception as e:
-#         logging.error(f"Error writing output file: {e}")
+    documents = [item["context"] for item in embedded_data]
+    embeddings = [item["embedding"] for item in embedded_data]
+    ids = [item["id"] for item in embedded_data]
+    metadatas = [item["metadata"] for item in embedded_data]
+
+    print(f"Before storing, collection has {collection.count()} documents.")
+    collection.add(
+        documents=documents, embeddings=embeddings, ids=ids, metadatas=metadatas
+    )
+    print(f"After storing, collection has {collection.count()} documents.")
+
+    return f"Stored {len(documents)} documents to ChromaDB at {persist_path}"
