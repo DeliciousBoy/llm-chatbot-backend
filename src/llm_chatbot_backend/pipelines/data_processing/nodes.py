@@ -83,12 +83,8 @@ def embed_forum_data(data_list: list) -> list:
     return embedded_data
 
 
-def save_embedded(data: list[dict], filepath: str) -> str:
-    ...
-
-
 def store_to_chroma(embedded_data: list[dict], persist_path: str) -> str:
-    client = chromadb.PersistentClient(path="data/09_chroma_db")
+    client = chromadb.PersistentClient(path=persist_path)
     collection = client.get_or_create_collection(name="forum_data")
 
     documents = [item["context"] for item in embedded_data]
@@ -96,10 +92,10 @@ def store_to_chroma(embedded_data: list[dict], persist_path: str) -> str:
     ids = [item["id"] for item in embedded_data]
     metadatas = [item["metadata"] for item in embedded_data]
 
-    print(f"Before storing, collection has {collection.count()} documents.")
+    # print(f"Before storing, collection has {collection.count()} documents.")
     collection.add(
         documents=documents, embeddings=embeddings, ids=ids, metadatas=metadatas
     )
-    print(f"After storing, collection has {collection.count()} documents.")
+    # print(f"After storing, collection has {collection.count()} documents.")
 
     return f"Stored {len(documents)} documents to ChromaDB at {persist_path}"
