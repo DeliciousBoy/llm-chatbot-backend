@@ -1,9 +1,27 @@
-"""
-This is a boilerplate test file for pipeline 'web_scraping'
-generated using Kedro 0.19.12.
-Please add your pipeline tests here.
+import httpx
+import pytest
 
-Kedro recommends using `pytest` framework, more info about it can be found
-in the official documentation:
-https://docs.pytest.org/en/latest/getting-started.html
-"""
+from llm_chatbot_backend.pipelines.web_scraping.nodes import (
+    get_total_pages,
+)
+
+
+@pytest.mark.asyncio
+async def test_get_total_pages():
+    base_url = "https://www.agnoshealth.com/_next/data/i499vlSTx42EOnWUOHBkP/th/forums/search.json?page={page}"
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0"
+        )
+    }
+    timeout = httpx.Timeout(20)
+    async with httpx.AsyncClient(timeout=timeout, headers=headers) as client:
+        total_pages = await get_total_pages(client, base_url)
+        # print(f"📄 Total pages: {total_pages}")
+        assert total_pages > 0, "Total pages should be greater than 0"
+
+
+def test_dumm():
+    assert True

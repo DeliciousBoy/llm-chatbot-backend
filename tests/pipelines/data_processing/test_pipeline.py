@@ -1,9 +1,18 @@
-"""
-This is a boilerplate test file for pipeline 'data_processing'
-generated using Kedro 0.19.12.
-Please add your pipeline tests here.
+import pytest
 
-Kedro recommends using `pytest` framework, more info about it can be found
-in the official documentation:
-https://docs.pytest.org/en/latest/getting-started.html
-"""
+from llm_chatbot_backend.pipelines.data_processing.nodes import (
+    build_rag_context,
+)
+
+
+@pytest.fixture()
+def test_build_rag_context():
+    data = {
+        "forum_text": "ฉันมีอาการปวดหัว",
+        "doctor_reply": "คุณควรพักผ่อน",
+        "disease_text": "ไมเกรน",
+        "tags": ["ปวดหัว", "ไมเกรน"],
+    }
+    result = build_rag_context(data)
+    assert "[คำถามจากผู้ใช้]" in result
+    assert "[คำตอบจากแพทย์]" in result
