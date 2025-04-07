@@ -8,7 +8,7 @@ cleaned_forum_data:
 
 embedded_forum_data:
   type: llm_chatbot_backend.datasets.utf8_json.Utf8JSON
-  filepath: data/10_embedded/embed_forum_data.json
+  filepath: data/03_embedded/embed_forum_data.json
 
 retrieved_documents:
   type: llm_chatbot_backend.datasets.utf8_json.Utf8JSON
