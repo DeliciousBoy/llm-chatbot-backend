@@ -2,13 +2,11 @@ import re
 import unicodedata
 
 import chromadb
-
-# import logger
 from sentence_transformers import SentenceTransformer
 
 
 def clean_text(text: str) -> str:
-    """ "Clean unwanted characters, URL, and normalize Thai text."""
+    """ Clean unwanted characters, URL, and normalize Thai text."""
 
     if not isinstance(text, str):
         return ""
@@ -76,7 +74,6 @@ def embed_forum_data(data_list: list) -> list:
                 "metadata": {
                     "disease_key": item["disease_key"],
                     "tags": ", ".join(item["tags"]),
-                    "doctor_reply": item["doctor_reply"],
                 },
             }
         )
