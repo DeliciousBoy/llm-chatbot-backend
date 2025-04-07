@@ -1,8 +1,3 @@
-"""
-This is a boilerplate pipeline 'data_processing'
-generated using Kedro 0.19.12
-"""
-
 from kedro.pipeline import node, Pipeline, pipeline  # noqa
 from .nodes import process_text, embed_forum_data, store_to_chroma
 
