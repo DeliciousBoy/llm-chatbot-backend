@@ -12,9 +12,12 @@ dependencies = [
     "jupyterlab>=3.0",
     "notebook",
     "kedro~=0.19.12",
-    "sentence_transformers>=2.2.2",
+    "transformers>=4.43.1",
     "tqdm>=4.66.1",
     "chromadb>=1.0.0",
+    "fastapi>=0.115.9",
+    "accelerate==0.27.2",
+    "sentence-transformers>=4.0.2",
 ]
 
 [project.scripts]
