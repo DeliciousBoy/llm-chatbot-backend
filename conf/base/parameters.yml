@@ -1,0 +1,14 @@
+web_scraping:
+  base_url: "https://www.agnoshealth.com/_next/data/i499vlSTx42EOnWUOHBkP/th/forums/search.json?page={page}"
+  headers:
+    User-Agent: >-
+      Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+      AppleWebKit/537.36 (KHTML, like Gecko)
+      Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0
+  timeout: 20
+  concurrent_limit: 3
+
+
+chroma_persist_path: data/09_chroma_db
+embedding_model: "sentence-transformers/paraphrase-multilingual-mpnet-base-v2"
+user_query: "โรคเบาหวาน"
