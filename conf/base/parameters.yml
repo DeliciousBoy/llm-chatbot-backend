@@ -11,4 +11,3 @@ web_scraping:
 
 chroma_persist_path: data/04_chroma_db
 embedding_model: "sentence-transformers/paraphrase-multilingual-mpnet-base-v2"
-user_query: "โรคเบาหวาน"
