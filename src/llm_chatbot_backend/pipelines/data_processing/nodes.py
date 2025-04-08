@@ -2,7 +2,6 @@ import logging
 import re
 
 import chromadb
-from chromadb.utils import embedding_functions
 from pythainlp.util import normalize
 from sentence_transformers import SentenceTransformer
 
