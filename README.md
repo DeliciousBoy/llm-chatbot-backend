@@ -1,21 +1,11 @@
-# llm-chatbot-backend
+# LLM Chatbot
 
 [![Powered by Kedro](https://img.shields.io/badge/powered_by-kedro-ffc900?logo=kedro)](https://kedro.org)
 
 ## Overview
 
-This is your new Kedro project, which was generated using `kedro 0.19.12`.
+A Retrieval-Augmented Generation (RAG) system for scraping website data, embedding text, and answering questions via LLM
 
-Take a look at the [Kedro documentation](https://docs.kedro.org) to get started.
-
-## Rules and guidelines
-
-In order to get the best out of the template:
-
-* Don't remove any lines from the `.gitignore` file we provide
-* Make sure your results can be reproduced by following a data engineering convention
-* Don't commit data to your repository
-* Don't commit any credentials or your local configuration to your repository. Keep all your credentials and local configuration in `conf/local/`
 
 ## How to install dependencies
 
@@ -25,6 +15,9 @@ To install them, run:
 
 ```
 pip install -r requirements.txt
+```
+```
+uv install -e .[dev, doc]
 ```
 
 ## How to run your Kedro pipeline
