@@ -9,13 +9,13 @@ logging.getLogger("kedro.io.data_catalog").setLevel(logging.WARNING)
 
 
 def clean_text(text: str) -> str:
-    """Clean unwanted characters, URL, and normalize Thai text."""
+    """Cleans and normalizes input text, specifically for Thai language processing."""
 
     if not isinstance(text, str):
         return ""
 
     text = normalize(text)
-    text = re.sub(r"https?://\S+", "", text)
+    text = re.sub(r"https?://\S+", "", text)  # Remove URLs
     text = re.sub(
         r"[^\u0E00-\u0E7F\w\s.,!?']", "", text
     )  # Keep Thai, basic punctuations
@@ -47,6 +47,7 @@ def process_text(data: list[dict]) -> list[dict]:
 
 
 def build_rag_context(data) -> str:
+    """Constructs a context string for retrieval-augmented generation (RAG) from the input data."""
     return f"""[คำถามจากผู้ใช้]
         {data["forum_text"]}
 
@@ -62,6 +63,7 @@ def build_rag_context(data) -> str:
 
 
 def embed_forum_data(data_list: list) -> list:
+    """Generates embeddings for forum data using a pre-trained SentenceTransformer model."""
     model = SentenceTransformer(
         "sentence-transformers/paraphrase-multilingual-mpnet-base-v2"
     )
@@ -87,6 +89,7 @@ def embed_forum_data(data_list: list) -> list:
 
 
 def store_to_chroma(embedded_data: list[dict], persist_path: str) -> str:
+    """Stores the embedded data into a ChromaDB collection."""
     client = chromadb.PersistentClient(path=persist_path)
     collection = client.get_or_create_collection(name="forum_data")
 
