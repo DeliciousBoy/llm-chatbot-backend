@@ -46,13 +46,23 @@ pip install -e .[dev,docs]
 ```
 
 ## How to run Kedro pipeline
+This project uses [Kedro](https://kedro.org) to organize data workflows into modular pipelines.
 
-You can run your Kedro project with:
+### Avaliable pipelines
+
+
+| Pipeline Name      | Description                          |
+|--------------------|--------------------------------------|
+| `data_processing`  | Cleans and embeds text data into vectors |
+| `web_scraping`     | Asynchronously scrapes web content and stores it as raw data |
+
+Each pipeline is defined in `src/llm_chatbot_backend/pipelines/` and can be run individually or as a group. You can also run specific nodes within a pipeline.
 
 ```
-kedro run
+kedro run # Run all pipelines
+kedro run --pipeline=web_scraping # Run web scraping pipeline
+kedro run --pipeline=data_processing # Run data processing pipeline
 ```
-
 ## How to test your Kedro project
 this project uses `pytest` to run test cases. You can run your tests with:
 
@@ -94,7 +104,8 @@ This project follows the [Kedro](https://kedro.org) project layout with addition
 │       |   └──📄test_pipeline.py
 │       └── 📁web_scraping/
 |           └──📄test_pipeline.py
-├──📄main.py # Streamlit chat interface
+├──📄main.py # Streamlit chat interface\
+├──📄scheduler.py # Automate Web Scraping Task
 ├──📄pyproject.toml # Project config & dependencies
 ├──📄requirements.txt # Pip requirements
 ├──📄uv.lock # uv dependency lockfile
