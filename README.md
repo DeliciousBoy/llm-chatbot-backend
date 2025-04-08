@@ -40,3 +40,8 @@ kedro run
 ```
 pytest tests/
 ```
+
+## How to run chat interface
+```
+streamlit run main.py
+```
