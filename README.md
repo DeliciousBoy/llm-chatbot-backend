@@ -12,7 +12,7 @@ A Retrieval-Augmented Generation (RAG) system for scraping website data, embeddi
 Declare any dependencies in `requirements.txt` and `pyproject.toml` for `pip` installation.
 
 ### clone the repository
-```
+```bash
 git clone https://github.com/DeliciousBoy/llm-chatbot-backend.git
 cd llm-chatbot-backend
 ```
@@ -20,7 +20,7 @@ cd llm-chatbot-backend
 ### Installing `uv`
 this project uses `uv` to manage virtual environments and dependencies for different Python versions. You can install `uv` run:
 
-```
+```bash
 curl -Ls https://astral.sh/uv/install.sh | sh
 ```
 Or follow the instructions from the official GitHub repository: https://github.com/astral-sh/uv
@@ -28,7 +28,7 @@ Once installed, you can set up the environment with:
 
 
 ### Install with `uv` (Recommended) `This project requires Python 3.11.11`
-```
+```bash
 uv venv
 source .venv/bin/activate # Or .venv/Scripts/activate for Windows
 uv pip install -r requirements.txt
@@ -38,7 +38,7 @@ If you prefer not to use uv, you can fall back to pip (see below).
 
 ### Install with `pip` (Not recommended)
 This is not recommended as it may lead to dependency conflicts, especially if you are using different Python versions.
-```
+```bash
 python -m venv .venv
 source .venv/bin/activate # Or .venv/Scripts/activate for Windows
 pip install -r requirements.txt
@@ -58,15 +58,32 @@ This project uses [Kedro](https://kedro.org) to organize data workflows into mod
 
 Each pipeline is defined in `src/llm_chatbot_backend/pipelines/` and can be run individually or as a group. You can also run specific nodes within a pipeline.
 
-```
+```bash
 kedro run # Run all pipelines
 kedro run --pipeline=web_scraping # Run web scraping pipeline
 kedro run --pipeline=data_processing # Run data processing pipeline
 ```
+
+## Visualize Kedro pipeline
+You can visualize the pipeline using Kedro's built-in visualization tool. This will generate a graph of the pipeline nodes and their dependencies.
+
+```bash
+ kedro viz run --autoreload
+```
+## Running Scheduled Jobs
+
+This project includes a scheduler using `APScheduler` to automate periodic tasks such as scraping data, generating embeddings, or updating indexes.
+
+To start the scheduler, run:
+
+```bash
+python scheduler.py
+```
+
 ## How to test your Kedro project
 this project uses `pytest` to run test cases. You can run your tests with:
 
-```
+```bash
 pytest
 ```
 
