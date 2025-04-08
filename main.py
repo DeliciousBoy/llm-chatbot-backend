@@ -31,9 +31,10 @@ def retrieve_relevant_documents(
     results = collection.query(query_embeddings=[query_embedding], n_results=top_k)
 
     replies = []
-    for i in range(len(results["documents"][0])):
-        context = results["documents"][0][i]
-        replies.append(context)
+    if results["documents"] is not None:
+        for i in range(len(results["documents"][0])):
+            context = results["documents"][0][i]
+            replies.append(context)
     return replies
 
 
@@ -48,7 +49,7 @@ def generate_answer(user_query: str, context: list[str]) -> str:
     # response = models.generate_content(prompt)
     response = client.models.generate_content(model="gemini-2.0-flash", contents=prompt)
 
-    return response.text
+    return response.text or ""
 
 
 # Initialize chat history
