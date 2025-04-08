@@ -14,10 +14,11 @@ from llm_chatbot_backend.pipelines.data_processing.nodes import (
 @pytest.mark.parametrize(
     "text,expected",
     [
-        ("มากกก", "มากก"),  # ลดอักษรไทยซ้ำ
-        ("https://example.com", ""),  # ลบ URL
-        ("เศร้าา🥲", "เศร้า"),  # ลบ emoji
-        ("   ", ""),  # ลบ whitespace
+        ("มากกก", "มากก"),  # Reduce repeated Thai chars
+        ("https://example.com", ""),  # Remove URL
+        ("เศร้าา🥲", "เศร้า"),  # Remove emoji
+        ("   ", ""),  # Remove whitespace
+        # ("หิ้้้้้้้้วข้าว", "หิวข้าว"),  # Reduce repeated Thai chars with uncommon pattern
     ],
 )
 def test_clean_text(text, expected):
