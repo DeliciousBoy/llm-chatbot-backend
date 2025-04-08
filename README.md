@@ -26,21 +26,23 @@ curl -Ls https://astral.sh/uv/install.sh | sh
 Or follow the instructions from the official GitHub repository: https://github.com/astral-sh/uv
 Once installed, you can set up the environment with:
 
+This project requires Python 3.11
 ### Install with `uv` (Recommended)
 ```
 uv venv
 source .venv/bin/activate # Or .venv/Scripts/activate for Windows
 uv pip install -r requirements.txt
-uv pip install -e .[dev, doc]
+uv pip install -e .[dev, docs]
 ```
 If you prefer not to use uv, you can fall back to pip (see below).
 
-### Install with `pip`
+### Install with `pip` (Not recommended)
+This is not recommended as it may lead to dependency conflicts, especially if you are using different Python versions.
 ```
 python -m venv .venv
 source .venv/bin/activate # Or .venv/Scripts/activate for Windows
 pip install -r requirements.txt
-pip install -e .[dev, doc]
+pip install -e .[dev, docs]
 ```
 
 ## How to run Kedro pipeline
