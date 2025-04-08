@@ -21,6 +21,8 @@ dependencies = [
     "streamlit>=1.44.1",
     "dotenv>=0.9.9",
     "google-genai>=1.9.0",
+    "pythainlp>=5.1.1",
+    "tenacity>=9.1.2",
 ]
 
 [project.scripts]
@@ -73,6 +75,16 @@ addopts = """
 fail_under = 0
 show_missing = true
 exclude_lines = ["pragma: no cover", "raise NotImplementedError"]
+
+[tool.coverage.run]
+omit = [
+    "*/__init__.py",
+    "*/__main__.py",
+    "*/settings.py",
+    "*/pipeline_registry.py",
+    "*/pipeline.py",
+
+]
 
 [tool.ruff.format]
 docstring-code-format = true

@@ -1737,8 +1737,10 @@ dependencies = [
     { name = "jupyterlab" },
     { name = "kedro" },
     { name = "notebook" },
+    { name = "pythainlp" },
     { name = "sentence-transformers" },
     { name = "streamlit" },
+    { name = "tenacity" },
     { name = "tqdm" },
     { name = "transformers" },
 ]
@@ -1785,6 +1787,7 @@ requires-dist = [
     { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.23.8" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = "~=4.1" },
     { name = "pytest-mock", marker = "extra == 'dev'", specifier = ">=1.7.1,<2.0" },
+    { name = "pythainlp", specifier = ">=5.1.1" },
     { name = "ruff", marker = "extra == 'dev'", specifier = "~=0.1.8" },
     { name = "sentence-transformers", specifier = ">=4.0.2" },
     { name = "sphinx", marker = "extra == 'docs'", specifier = ">=5.3,<7.3" },
@@ -1792,6 +1795,7 @@ requires-dist = [
     { name = "sphinx-copybutton", marker = "extra == 'docs'", specifier = "==0.5.2" },
     { name = "sphinx-rtd-theme", marker = "extra == 'docs'", specifier = "==2.0.0" },
     { name = "streamlit", specifier = ">=1.44.1" },
+    { name = "tenacity", specifier = ">=9.1.2" },
     { name = "tqdm", specifier = ">=4.66.1" },
     { name = "transformers", specifier = ">=4.43.1" },
 ]
@@ -3387,6 +3391,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/89/77/3e1a2353d67e29096eb0018d7c757dc138dd236ca57d38540848ce0f7738/pytest-mock-1.13.0.tar.gz", hash = "sha256:e24a911ec96773022ebcc7030059b57cd3480b56d4f5d19b7c370ec635e6aed5", size = 23823 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/51/35/67019e708f2adaf2d9f125b4ddff49ff40e22d3181a368b1ef7ba3268546/pytest_mock-1.13.0-py2.py3-none-any.whl", hash = "sha256:67e414b3caef7bff6fc6bd83b22b5bc39147e4493f483c2679bc9d4dc485a94d", size = 10400 },
+]
+
+[[package]]
+name = "pythainlp"
+version = "5.1.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "requests" },
+    { name = "tzdata", marker = "sys_platform == 'win32'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/6d/d5/9f38f745a736ab1d930e677031abeef2a7e0b52cbfefa65218f29b9712ba/pythainlp-5.1.1.tar.gz", hash = "sha256:1752bab076737827f8121a9929cba5aad3ae76e6cabd8d90d47556a509106f34", size = 18713952 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3f/83/f8f1374e1f85a0767668c86d472e012c7bda491377b5852e0d71366d1dda/pythainlp-5.1.1-py3-none-any.whl", hash = "sha256:977d4126a46d41a86e348626f4247e91625254b56b089f666b935c5d72b53bb2", size = 19256073 },
 ]
 
 [[package]]
