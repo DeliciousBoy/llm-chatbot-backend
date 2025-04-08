@@ -51,11 +51,8 @@ async def get_total_pages(client: httpx.AsyncClient, base_url: str) -> int:
 
 @retry(
     stop=stop_after_attempt(3),
-    wait=wait_fixed(5),
+    wait=wait_fixed(5),  # Wait 5 seconds between attempts
     reraise=True,  # Reraise the last exception
-    before_sleep=lambda retry_state: logger.warning(
-        f"Retrying due to error: {retry_state.outcome.exception()}"
-    ),
 )
 async def fetch_forum_page(
     *, client: httpx.AsyncClient, page: int, sem: asyncio.Semaphore, base_url: str
