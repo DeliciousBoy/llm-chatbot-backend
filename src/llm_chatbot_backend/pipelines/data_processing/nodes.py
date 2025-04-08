@@ -1,23 +1,28 @@
+import logging
 import re
-import unicodedata
 
 import chromadb
+from chromadb.utils import embedding_functions
+from pythainlp.util import normalize
 from sentence_transformers import SentenceTransformer
+
+logging.getLogger("kedro.io.data_catalog").setLevel(logging.WARNING)
 
 
 def clean_text(text: str) -> str:
-    """ Clean unwanted characters, URL, and normalize Thai text."""
+    """Clean unwanted characters, URL, and normalize Thai text."""
 
     if not isinstance(text, str):
         return ""
 
-    text = re.sub(r"https?://\S+", "", text)  # Remove URL
+    text = normalize(text)
+    text = re.sub(r"https?://\S+", "", text)
     text = re.sub(
         r"[^\u0E00-\u0E7F\w\s.,!?']", "", text
     )  # Keep Thai, basic punctuations
     text = re.sub(r"\s+", " ", text)  # Collapse multiple whitespace
-    text = re.sub(r"([ก-๙])\1{2,}", r"\1\1", text)  # Reduce repeated Thai chars
-    text = unicodedata.normalize("NFC", text)  # Normalize Thai characters
+    text = re.sub(r"([ก-๙])\1{1,}", r"\1\1", text)  # Reduce repeated Thai chars
+
     return text.strip()
 
 
@@ -62,13 +67,14 @@ def embed_forum_data(data_list: list) -> list:
         "sentence-transformers/paraphrase-multilingual-mpnet-base-v2"
     )
 
-    context = [build_rag_context(item) for item in data_list]
-    embedding = model.encode(context, batch_size=32, show_progress_bar=True).tolist()
+    contexts = [build_rag_context(item) for item in data_list]
+    embeddings = model.encode(contexts, batch_size=32, show_progress_bar=True).tolist()
+
     embedded_data = []
-    for i, (item, context, embedding) in enumerate(zip(data_list, context, embedding)):
+    for item, context, embedding in zip(data_list, contexts, embeddings):
         embedded_data.append(
             {
-                "id": f"doc_{i}",
+                "id": item.get("id") or f"doc_{hash(context)}",
                 "embedding": embedding,
                 "context": context,
                 "metadata": {
@@ -77,6 +83,7 @@ def embed_forum_data(data_list: list) -> list:
                 },
             }
         )
+
     return embedded_data
 
 
@@ -84,15 +91,14 @@ def store_to_chroma(embedded_data: list[dict], persist_path: str) -> str:
     client = chromadb.PersistentClient(path=persist_path)
     collection = client.get_or_create_collection(name="forum_data")
 
+    ids = [item["id"] for item in embedded_data]
     documents = [item["context"] for item in embedded_data]
     embeddings = [item["embedding"] for item in embedded_data]
     ids = [item["id"] for item in embedded_data]
     metadatas = [item["metadata"] for item in embedded_data]
 
-    # print(f"Before storing, collection has {collection.count()} documents.")
-    collection.add(
-        documents=documents, embeddings=embeddings, ids=ids, metadatas=metadatas
+    collection.upsert(
+        ids=ids, documents=documents, embeddings=embeddings, metadatas=metadatas
     )
-    # print(f"After storing, collection has {collection.count()} documents.")
 
     return f"Stored {len(documents)} documents to ChromaDB at {persist_path}"

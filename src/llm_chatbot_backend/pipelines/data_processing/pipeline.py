@@ -3,7 +3,7 @@ from .nodes import process_text, embed_forum_data, store_to_chroma
 
 
 def create_pipeline(**kwargs) -> Pipeline:
-    return pipeline(
+    return Pipeline(
         [
             node(
                 func=process_text,
