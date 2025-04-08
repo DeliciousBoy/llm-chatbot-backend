@@ -11,7 +11,7 @@ A Retrieval-Augmented Generation (RAG) system for scraping website data, embeddi
 
 Declare any dependencies in `requirements.txt` and `pyproject.toml` for `pip` installation.
 
-
+clone the repository
 ```
 git clone https://github.com/DeliciousBoy/llm-chatbot-backend.git
 cd llm-chatbot-backend
@@ -22,7 +22,6 @@ this project uses `uv` to manage virtual environments and dependencies for diffe
 
 ```
 curl -Ls https://astral.sh/uv/install.sh | sh
-
 ```
 Or follow the instructions from the official GitHub repository: https://github.com/astral-sh/uv
 Once installed, you can set up the environment with:
