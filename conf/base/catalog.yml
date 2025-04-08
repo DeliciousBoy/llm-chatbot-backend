@@ -4,12 +4,12 @@ raw_forum_data:
 
 cleaned_forum_data:
   type: llm_chatbot_backend.datasets.utf8_json.Utf8JSON
-  filepath: data/02_intermediate/forum_data.json
+  filepath: data/cleaned/forum_data.json
 
 embedded_forum_data:
   type: llm_chatbot_backend.datasets.utf8_json.Utf8JSON
   filepath: data/03_embedded/embed_forum_data.json
 
-retrieved_documents:
-  type: llm_chatbot_backend.datasets.utf8_json.Utf8JSON
-  filepath: data/08_reporting/retrieved_documents.txt
+# retrieved_documents:
+#   type: llm_chatbot_backend.datasets.utf8_json.Utf8JSON
+#   filepath: data/08_reporting/retrieved_documents.txt
