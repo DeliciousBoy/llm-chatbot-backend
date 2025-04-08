@@ -55,7 +55,7 @@ def generate_answer(user_query: str, context: list[str]) -> str:
 # Initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "assistant", "content": "Let's start chatting! 👇"}
+        {"role": "assistant", "content": "สามารถสอบถามปัญหาสุขภาพได้เลย! 👇"}
     ]
 
 # Display chat messages from history on app rerun
