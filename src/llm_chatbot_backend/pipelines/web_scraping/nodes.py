@@ -75,10 +75,24 @@ async def fetch_forum_page(
 
 
 async def scrape_forum_page(params: dict) -> list[dict]:
-    sem = asyncio.Semaphore(params["concurrent_limit"])
-    timeout = httpx.Timeout(params["timeout"])
-    base_url = params["base_url"]
-    headers = params["headers"]
+    base_url = params.get("base_url")
+    if not base_url:
+        raise ValueError("Base URL is required.")
+
+    concurrent_limit = params.get("concurrent_limit", 3)
+    timeout_sec = params.get("timeout", 20)
+    headers = params.get("headers", {})
+    if not isinstance(headers, dict):
+        logger.warning("Invalid headers, using empty dict.")
+        headers = {}
+
+    sem = asyncio.Semaphore(concurrent_limit)
+    timeout = httpx.Timeout(timeout_sec)
+
+    # sem = asyncio.Semaphore(params["concurrent_limit"])
+    # timeout = httpx.Timeout(params["timeout"])
+    # base_url = params["base_url"]
+    # headers = params["headers"]
 
     async with httpx.AsyncClient(timeout=timeout, headers=headers) as client:
         page_end = await get_total_pages(client, base_url)
