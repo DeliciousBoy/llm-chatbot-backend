@@ -11,7 +11,7 @@ A Retrieval-Augmented Generation (RAG) system for scraping website data, embeddi
 
 Declare any dependencies in `requirements.txt` and `pyproject.toml` for `pip` installation.
 
-clone the repository
+### clone the repository
 ```
 git clone https://github.com/DeliciousBoy/llm-chatbot-backend.git
 cd llm-chatbot-backend
