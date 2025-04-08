@@ -40,7 +40,7 @@ def retrieve_relevant_documents(
 
 
 def generate_answer(user_query: str, context: list[str]) -> str:
-    # context_doc = "\n".join(context)
+    """Generate response using Gemini LLM with conversation context."""
     prompt = f"""
     คุณเป็นผู้ช่วยที่สามารถให้คำแนะนำเกี่ยวกับการแพทย์ได้โดยอิงจาก context ที่มีให้แล้วนำมาวิเคราะห์โดยอิงจากข้อความให้มากที่สุด.
     **สำคัญ**: ตอนตอบกลับ ให้ตอบราวกับเป็นคำตอบตรงประเด็นจากผู้ช่วยทางการแพทย์ในระบบสนทนา ถ้าสามารถให้คำแนะนำได้ให้ทำเลยโดยอิงจากข้อมูลที่มีให้ใน context.
