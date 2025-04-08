@@ -4,7 +4,7 @@ raw_forum_data:
 
 cleaned_forum_data:
   type: llm_chatbot_backend.datasets.utf8_json.Utf8JSON
-  filepath: data/cleaned/forum_data.json
+  filepath: data/02_cleaned/forum_data.json
 
 embedded_forum_data:
   type: llm_chatbot_backend.datasets.utf8_json.Utf8JSON
