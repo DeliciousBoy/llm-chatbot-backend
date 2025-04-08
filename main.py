@@ -5,6 +5,7 @@ import chromadb
 import streamlit as st
 from dotenv import load_dotenv
 from google import genai
+from google.genai import types
 from sentence_transformers import SentenceTransformer
 
 load_dotenv()
@@ -47,7 +48,15 @@ def generate_answer(user_query: str, context: list[str]) -> str:
     User's questiion: {user_query}
     """
     # response = models.generate_content(prompt)
-    response = client.models.generate_content(model="gemini-2.0-flash", contents=prompt)
+    response = client.models.generate_content(
+        model="gemini-2.0-flash",
+        contents=prompt,
+        config=types.GenerateContentConfig(
+            max_output_tokens=500,
+            system_instruction="คุณเป็นผู้ช่วยที่สามารถให้คำแนะนำเกี่ยวกับการแพทย์ได้",
+            temperature=0.2,
+        ),
+    )
 
     return response.text or ""
 
