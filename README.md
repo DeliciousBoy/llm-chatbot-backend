@@ -6,37 +6,6 @@
 
 A Retrieval-Augmented Generation (RAG) system for scraping website data, embedding text, and answering questions via LLM
 
-## Proejct Structure
-```
-📁llm-chatbot-backend/
-├── 📁conf/ # Kedro configuration files
-│ └── 📁base/
-│   └──📄catalog.yml
-│   └──📄parameters.yml
-├── 📁data/ # raw/cleaned/embedded/chromadb
-├── 📁src/ # Source code (Kedro pipelines, modules)
-│ └── 📁llm_chatbot_backend/
-│   └── 📁datasets/
-│   |   └── 📄utf8_json.py # Custom JSON 
-│   └── 📁pipelines/
-│       └── 📁data_processing/
-│       |  └──📄nodes.py
-│       |  └──📄pipeline.py
-│       └── 📁web_scraping/
-│          └──📄nodes.py
-│          └──📄pipeline.py
-├── 📁tests/ # Pytest test cases
-│   └── 📁pipelines/
-│       └── 📁data_processing/
-│       |   └──📄test_pipeline.py
-│       └── 📁web_scraping/
-|           └──📄test_pipeline.py
-├──📄main.py # Streamlit chat interface
-├──📄pyproject.toml # Project config & dependencies
-├──📄requirements.txt # Pip requirements
-├──📄uv.lock # uv dependency lockfile
-└──📄.env # Environment variables
-```
 
 ## How to install dependencies
 
@@ -75,4 +44,36 @@ pytest tests/
 ## How to run chat interface
 ```
 streamlit run main.py
+```
+
+## Proejct Structure
+```
+📁llm-chatbot-backend/
+├── 📁conf/ # Kedro configuration files
+│ └── 📁base/
+│   └──📄catalog.yml
+│   └──📄parameters.yml
+├── 📁data/ # raw/cleaned/embedded/chromadb
+├── 📁src/ # Source code (Kedro pipelines, modules)
+│ └── 📁llm_chatbot_backend/
+│   └── 📁datasets/
+│   |   └── 📄utf8_json.py # Custom JSON
+│   └── 📁pipelines/
+│       └── 📁data_processing/
+│       |  └──📄nodes.py
+│       |  └──📄pipeline.py
+│       └── 📁web_scraping/
+│          └──📄nodes.py
+│          └──📄pipeline.py
+├── 📁tests/ # Pytest test cases
+│   └── 📁pipelines/
+│       └── 📁data_processing/
+│       |   └──📄test_pipeline.py
+│       └── 📁web_scraping/
+|           └──📄test_pipeline.py
+├──📄main.py # Streamlit chat interface
+├──📄pyproject.toml # Project config & dependencies
+├──📄requirements.txt # Pip requirements
+├──📄uv.lock # uv dependency lockfile
+└──📄.env # Environment variables
 ```
