@@ -16,16 +16,21 @@ To install them, run:
 git clone https://github.com/DeliciousBoy/llm-chatbot-backend.git
 cd llm-chatbot-backend
 ```
+
+### Install with `uv` (Recommended)
 ```
 uv venv
-.venv\Scripts\activate # Window
-source .venv/bin/activate # Unix
+source .venv/bin/activate # Or .venv/Scripts/activate for Windows
+uv pip install -r requirements.txt
+uv pip install -e .[dev, doc]
 ```
+
+### Install with `pip`
 ```
+python -m venv .venv
+source .venv/bin/activate # Or .venv/Scripts/activate for Windows
 pip install -r requirements.txt
-```
-```
-uv install -e .[dev, doc]
+pip install -e .[dev, doc]
 ```
 
 ## How to run Kedro pipeline
