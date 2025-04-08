@@ -3,7 +3,7 @@ from .nodes import run_scraping_pipeline
 
 
 def create_pipeline(**kwargs) -> Pipeline:
-    return pipeline(
+    return Pipeline(
         [
             node(
                 func=run_scraping_pipeline,

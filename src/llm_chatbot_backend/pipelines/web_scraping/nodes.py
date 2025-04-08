@@ -3,7 +3,7 @@ import logging
 import math
 
 import httpx
-from tqdm import tqdm
+from tenacity import retry, stop_after_attempt, wait_fixed
 from tqdm.asyncio import tqdm_asyncio
 
 logger = logging.getLogger(__name__)
@@ -49,7 +49,15 @@ async def get_total_pages(client: httpx.AsyncClient, base_url: str) -> int:
     return math.ceil(total_items / item_per_page) if item_per_page else 1
 
 
-async def fecth_forum_page(
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_fixed(5),
+    reraise=True,  # Reraise the last exception
+    before_sleep=lambda retry_state: logger.warning(
+        f"Retrying due to error: {retry_state.outcome.exception()}"
+    ),
+)
+async def fetch_forum_page(
     *, client: httpx.AsyncClient, page: int, sem: asyncio.Semaphore, base_url: str
 ) -> list[dict]:
     """Fetches a page of forum data.
@@ -62,15 +70,11 @@ async def fecth_forum_page(
     """
     url = base_url.format(page=page)
     async with sem:
-        try:
-            res = await client.get(url)
-            res.raise_for_status()
-            data = res.json()
-            forums = data.get("pageProps", {}).get("forums", [])
-            return [extract_forum_info(f) for f in forums]
-        except Exception as e:
-            tqdm.write(f"Error fetching page {page}: {e}")
-            return []
+        res = await client.get(url)
+        res.raise_for_status()
+        data = res.json()
+        forums = data.get("pageProps", {}).get("forums", [])
+        return [extract_forum_info(f) for f in forums]
 
 
 async def scrape_forum_page(params: dict) -> list[dict]:
@@ -82,7 +86,7 @@ async def scrape_forum_page(params: dict) -> list[dict]:
     async with httpx.AsyncClient(timeout=timeout, headers=headers) as client:
         page_end = await get_total_pages(client, base_url)
         tasks = [
-            fecth_forum_page(client=client, page=page, sem=sem, base_url=base_url)
+            fetch_forum_page(client=client, page=page, sem=sem, base_url=base_url)
             for page in range(1, page_end + 1)
         ]
         results = await tqdm_asyncio.gather(*tasks)
