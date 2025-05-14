@@ -24,6 +24,9 @@ dependencies = [
     "pythainlp>=5.1.1",
     "tenacity>=9.1.2",
     "apscheduler>=3.11.0",
+    "anyio>=4.9.0",
+    "pytest-asyncio>=0.23.8",
+    "kedro-viz>=11.0.0",
 ]
 
 [project.scripts]
@@ -106,5 +109,10 @@ ignore = ["E501"]  # Ruff format takes care of line-too-long
 
 [tool.kedro_telemetry]
 project_id = "eb9a87db935142dfb43d40ec71c85dd4"
+
+[dependency-groups]
+dev = [
+    "pytest-cov>=4.1.0",
+]
 
 
